@@ -1,5 +1,6 @@
 package linkedlist;
 
+import java.math.BigInteger;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -20,30 +21,47 @@ public class LinkedList<T> implements Iterable<T> {
     protected int size;
 
     public LinkedList() {
-        /* YOUR CODE HERE */
-        this.frontNode.next=this.backNode; //this.frontNode.prev = this.backNode;
-        this.backNode.prev=this.frontNode; // this.backNode.next=this.frontNode;
-        this.size=2;
+        // this.frontNode=null;
+        // this.backNode=null;
+        this.size=0;
     }
 
     public LinkedList(Iterable<? extends T> c) {
         /* YOUR CODE HERE */
+
+       for (T value : c) {
+            if (frontNode == null && backNode == null) {
+                frontNode = new ListNode<T>(value);
+                backNode = frontNode;
+            } else {
+                backNode.next = new ListNode<T>(value);
+                ListNode<T> temp = backNode;
+                backNode = backNode.next;
+                backNode.prev = temp;
+            }
+            ++size;
+        }
+
     }
 
     public T peekFront() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public T peekBack() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public T popFront() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public T popBack() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public void pushBack(T value) {
@@ -64,10 +82,12 @@ public class LinkedList<T> implements Iterable<T> {
 
     public T remove() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public T remove(int index) {
         /* YOUR CODE HERE */
+        return null;
     }
 
     private void remove(ListNode<T> node) {
@@ -81,6 +101,7 @@ public class LinkedList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public class LinkedListIterator implements Iterator<T> {
@@ -89,11 +110,13 @@ public class LinkedList<T> implements Iterable<T> {
         @Override
         public boolean hasNext() {
             /* YOUR CODE HERE */
+            return false;
         }
 
         @Override
         public T next() {
             /* YOUR CODE HERE */
+            return null;
         }
 
         @Override
@@ -104,6 +127,7 @@ public class LinkedList<T> implements Iterable<T> {
 
     public Iterator<T> reverseIterator() {
         /* YOUR CODE HERE */
+        return null;
     }
 
     public class LinkedListReverseIterator implements Iterator<T> {
@@ -112,11 +136,13 @@ public class LinkedList<T> implements Iterable<T> {
         @Override
         public boolean hasNext() {
             /* YOUR CODE HERE */
+            return false;
         }
 
         @Override
         public T next() {
             /* YOUR CODE HERE */
+            return null;
         }
 
         @Override
