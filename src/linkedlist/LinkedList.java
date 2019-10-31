@@ -46,26 +46,53 @@ public class LinkedList<T> implements Iterable<T> {
 
     public T peekFront() {
         /* YOUR CODE HERE */
-        return null;
+        if (this.size==0){
+            return null;
+        }
+        return this.frontNode.payload;
+
+
     }
 
     public T peekBack() {
         /* YOUR CODE HERE */
-        return null;
+        if (this.size==0){
+            return null;
+        }
+        return this.backNode.payload;
     }
 
     public T popFront() {
-        /* YOUR CODE HERE */
-        return null;
+        //
+        if (frontNode == null){
+            throw new NoSuchElementException();
+        }
+        ListNode<T> temp = frontNode; // mark to return
+        frontNode = frontNode.next;
+        temp.next = null; // detach the first node from the list
+        frontNode.prev = null; // detach from the
+        --size;
+        return temp.payload;
     }
 
     public T popBack() {
-        /* YOUR CODE HERE */
-        return null;
+        //
+        if (frontNode == null){
+            throw new NoSuchElementException();
+        }
+        ListNode<T> temp = backNode; // mark to return
+        backNode = backNode.prev;
+        temp.prev = null; // detach the first node from the list
+        backNode.next = null; // detach from the
+        --size;
+        return temp.payload;
+
     }
 
     public void pushBack(T value) {
-        /* YOUR CODE HERE */
+        //
+
+        size++;
     }
 
     public void pushFront(T value) {
@@ -101,33 +128,46 @@ public class LinkedList<T> implements Iterable<T> {
     @Override
     public Iterator<T> iterator() {
         /* YOUR CODE HERE */
-        return null;
+        return new LinkedListIterator();
     }
 
     public class LinkedListIterator implements Iterator<T> {
         /* YOUR CODE HERE */
-
         @Override
         public boolean hasNext() {
-            /* YOUR CODE HERE */
-            return false;
+            // We will keep moving the frontNode along so if frontNode is
+           return frontNode != null;
         }
 
         @Override
         public T next() {
-            /* YOUR CODE HERE */
-            return null;
+            // Move through the nodes, starting at the front
+            if (frontNode == null){
+                throw new NoSuchElementException();
+            }
+            //ListNode<T> temp = frontNode; // mark to return
+            //temp.next = null; // detach the first node from the list
+            frontNode = frontNode.next;
+            //frontNode.prev = null; // detach from the
+            //--size;
+            return frontNode.prev.payload;
         }
 
         @Override
         public void remove() {
-            /* YOUR CODE HERE */
+            //
+            if (frontNode == null){
+                throw new NoSuchElementException();
+            }
+            frontNode = frontNode.next;
+            --size;
+            frontNode.prev = null;
         }
     }
 
     public Iterator<T> reverseIterator() {
         /* YOUR CODE HERE */
-        return null;
+        return new LinkedListReverseIterator();
     }
 
     public class LinkedListReverseIterator implements Iterator<T> {
@@ -136,18 +176,32 @@ public class LinkedList<T> implements Iterable<T> {
         @Override
         public boolean hasNext() {
             /* YOUR CODE HERE */
-            return false;
+            return backNode!=null;
         }
 
         @Override
         public T next() {
-            /* YOUR CODE HERE */
-            return null;
+            //
+            if (frontNode == null){
+                throw new NoSuchElementException();
+            }
+            //ListNode<T> temp = frontNode; // mark to return
+            //temp.next = null; // detach the first node from the list
+            backNode = backNode.prev;
+            //frontNode.prev = null; // detach from the
+            //--size;
+            return backNode.next.payload;
         }
 
         @Override
         public void remove() {
-            /* YOUR CODE HERE */
+            //
+            if (backNode == null){
+                throw new NoSuchElementException();
+            }
+            backNode = backNode.prev;
+            --size;
+            backNode.next = null;
         }
     }
 
