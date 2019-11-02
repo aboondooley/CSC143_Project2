@@ -21,8 +21,8 @@ public class LinkedList<T> implements Iterable<T> {
     protected int size;
 
     public LinkedList() {
-        // this.frontNode=null;
-        // this.backNode=null;
+        this.frontNode=null;
+        this.backNode=null;
         this.size=0;
     }
 
@@ -46,7 +46,7 @@ public class LinkedList<T> implements Iterable<T> {
 
     public T peekFront() {
         /* YOUR CODE HERE */
-        if (this.size==0){
+        if (frontNode==null){
             return null;
         }
         return this.frontNode.payload;
@@ -56,7 +56,7 @@ public class LinkedList<T> implements Iterable<T> {
 
     public T peekBack() {
         /* YOUR CODE HERE */
-        if (this.size==0){
+        if (backNode==null){
             return null;
         }
         return this.backNode.payload;
@@ -67,12 +67,18 @@ public class LinkedList<T> implements Iterable<T> {
         if (frontNode == null){
             throw new NoSuchElementException();
         }
-        ListNode<T> temp = frontNode; // mark to return
-        frontNode = frontNode.next;
-        temp.next = null; // detach the first node from the list
-        frontNode.prev = null; // detach from the
-        --size;
-        return temp.payload;
+        T result = frontNode.payload;
+        if (this.size==1){
+            frontNode = null;
+            backNode = null;
+        } else {
+            ListNode<T> temp = frontNode; // mark to return
+            frontNode = frontNode.next;
+            temp.next = null;
+            frontNode.prev = null;
+        }
+        size--;
+        return result;
     }
 
     public T popBack() {
@@ -80,31 +86,77 @@ public class LinkedList<T> implements Iterable<T> {
         if (frontNode == null){
             throw new NoSuchElementException();
         }
-        ListNode<T> temp = backNode; // mark to return
-        backNode = backNode.prev;
-        temp.prev = null; // detach the first node from the list
-        backNode.next = null; // detach from the
-        --size;
-        return temp.payload;
-
+        T result = backNode.payload;
+        if (this.size==1){
+            frontNode = null;
+            backNode = null;
+        } else {
+            ListNode<T> temp = backNode; // mark to return
+            backNode = backNode.prev;
+            temp.prev = null; // detach the first node from the list
+            backNode.next = null; // detach from the
+        }
+        size--;
+        return result;
     }
 
     public void pushBack(T value) {
         //
+        ListNode<T> newNode = new ListNode<T>(value);
+       if (frontNode==null){
+            backNode = newNode;
+            frontNode = backNode;
+            size++;
+        } else {
+           newNode.prev = backNode;
+           backNode.next = newNode;
+           backNode= newNode;
+           size++;
+       }
 
-        size++;
     }
 
     public void pushFront(T value) {
-        /* YOUR CODE HERE */
+        //
+        ListNode<T> newNode = new ListNode<T>(value);
+        if (frontNode==null){
+            frontNode = newNode;
+            backNode = frontNode;
+            size++;
+        } else {
+            newNode.next = frontNode;
+            frontNode.prev = newNode;
+            frontNode = newNode;
+            size++;
+        }
+
     }
 
     public void add(T value) {
-        /* YOUR CODE HERE */
+        //
+        this.pushFront(value);
     }
 
     public void add(int index, T value) {
-        /* YOUR CODE HERE */
+        //
+        if (index==0){
+            pushFront(value);
+        }
+        if (index==this.size()-1){
+            pushBack(value);
+        }
+        int counter = 1;
+        ListNode<T> currentNode = frontNode;
+        ListNode<T> newNode = new ListNode<>(value);
+        while (counter < index){
+            currentNode = currentNode.next;
+            counter++;
+        }
+        newNode.prev = currentNode;
+        newNode.next = currentNode.next;
+        newNode.prev.next = newNode;
+        newNode.next.prev = newNode;
+
     }
 
     public T remove() {
@@ -133,35 +185,35 @@ public class LinkedList<T> implements Iterable<T> {
 
     public class LinkedListIterator implements Iterator<T> {
         /* YOUR CODE HERE */
+        private ListNode<T> current = frontNode;
         @Override
         public boolean hasNext() {
             // We will keep moving the frontNode along so if frontNode is
-           return frontNode != null;
+           return current != null;
         }
 
         @Override
         public T next() {
             // Move through the nodes, starting at the front
-            if (frontNode == null){
+            if (!hasNext()){
                 throw new NoSuchElementException();
             }
-            //ListNode<T> temp = frontNode; // mark to return
-            //temp.next = null; // detach the first node from the list
-            frontNode = frontNode.next;
-            //frontNode.prev = null; // detach from the
-            //--size;
-            return frontNode.prev.payload;
+            T result = current.payload;
+            if (hasNext()){
+                current = current.next;
+            }
+            return result;
         }
 
         @Override
         public void remove() {
             //
-            if (frontNode == null){
+            if (!hasNext()){
                 throw new NoSuchElementException();
             }
-            frontNode = frontNode.next;
+            current = current.next;
             --size;
-            frontNode.prev = null;
+            current.prev = null;
         }
     }
 
@@ -172,36 +224,32 @@ public class LinkedList<T> implements Iterable<T> {
 
     public class LinkedListReverseIterator implements Iterator<T> {
         /* YOUR CODE HERE */
-
+        ListNode<T> current = backNode;
         @Override
         public boolean hasNext() {
             /* YOUR CODE HERE */
-            return backNode!=null;
+            return current!=null;
         }
 
         @Override
         public T next() {
             //
-            if (frontNode == null){
+            if (current == null){
                 throw new NoSuchElementException();
             }
-            //ListNode<T> temp = frontNode; // mark to return
-            //temp.next = null; // detach the first node from the list
-            backNode = backNode.prev;
-            //frontNode.prev = null; // detach from the
-            //--size;
-            return backNode.next.payload;
+            current = current.prev;
+            return current.next.payload;
         }
 
         @Override
         public void remove() {
             //
-            if (backNode == null){
+            if (current.next == null){
                 throw new NoSuchElementException();
             }
-            backNode = backNode.prev;
+            current = current.prev;
             --size;
-            backNode.next = null;
+            current.next = null;
         }
     }
 
