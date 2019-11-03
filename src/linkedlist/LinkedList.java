@@ -141,8 +141,10 @@ public class LinkedList<T> implements Iterable<T> {
         //
         if (index==0){
             pushFront(value);
-        } else if (index==this.size()-1){
+        } else if (index==this.size()){
             pushBack(value);
+        } else  if (index < 0 | index >= this.size) {
+            throw new IndexOutOfBoundsException();
         } else {
             int counter = 1;
             ListNode<T> currentNode = frontNode;
@@ -166,8 +168,27 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     public T remove(int index) {
-        /* YOUR CODE HERE */
-        return null;
+        //
+        T result;
+        if (index == 0){
+            result = popFront();
+        } else if (index == this.size-1){
+            result = popBack();
+        } else if (index < 0 | index >= this.size){
+            throw new IndexOutOfBoundsException();
+        } else {
+            int counter = 1;
+            ListNode<T> currentNode = frontNode;
+            while (counter <= index) {
+                currentNode = currentNode.next;
+                counter++;
+            }
+            result = currentNode.payload;
+            currentNode.prev.next = currentNode.next;
+            currentNode.next.prev = currentNode.prev;
+            size--;
+        }
+        return result;
     }
 
     private void remove(ListNode<T> node) {
