@@ -2,24 +2,31 @@ package linkedlist;
 
 public class Stack<T> {
     private LinkedList<T> list;
+    private int size;
 
     public Stack() {
         this.list = new LinkedList<>();
+        this.size = 0;
     }
 
     public void push(T value) {
-        /* YOUR CODE HERE */
+        //
+        list.pushFront(value);
+        size++;
     }
 
     public T pop() {
-        return null;
+        T result = list.popFront();
+        size--;
+        return result;
     }
 
     public T peek() {
-        return null;
+        T result = list.peekFront();
+        return result;
     }
 
     public int size() {
-        return 0;
+        return this.size;
     }
 }
