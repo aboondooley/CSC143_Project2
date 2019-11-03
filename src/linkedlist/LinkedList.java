@@ -50,8 +50,6 @@ public class LinkedList<T> implements Iterable<T> {
             return null;
         }
         return this.frontNode.payload;
-
-
     }
 
     public T peekBack() {
