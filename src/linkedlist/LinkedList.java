@@ -199,9 +199,7 @@ public class LinkedList<T> implements Iterable<T> {
                 throw new NoSuchElementException();
             }
             T result = current.payload;
-            if (current.next!=null){
-                current = current.next;
-            }
+            current = current.next;
             return result;
         }
 
@@ -215,16 +213,17 @@ public class LinkedList<T> implements Iterable<T> {
                 //current = null;
                 backNode = null;
                 frontNode = null;
+            } else if (current == null) {
+                current = backNode;
+                backNode = backNode.prev;
+                backNode.next = null;
+                current.prev = null;
             } else if (current.prev == frontNode) {
                 current = current.prev;
                 frontNode = frontNode.next;
                 current.next = null;
                 frontNode.prev = null;
                 current = frontNode;
-            } else if (current == backNode) {
-                backNode = backNode.prev;
-                backNode.next = null;
-                current.prev = null;
             } else {
                 current = current.prev;
                 ListNode<T> marker = current;
