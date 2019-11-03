@@ -141,27 +141,28 @@ public class LinkedList<T> implements Iterable<T> {
         //
         if (index==0){
             pushFront(value);
-        }
-        if (index==this.size()-1){
+        } else if (index==this.size()-1){
             pushBack(value);
+        } else {
+            int counter = 1;
+            ListNode<T> currentNode = frontNode;
+            ListNode<T> newNode = new ListNode<>(value);
+            while (counter < index) {
+                currentNode = currentNode.next;
+                counter++;
+            }
+            newNode.prev = currentNode;
+            newNode.next = currentNode.next;
+            newNode.prev.next = newNode;
+            newNode.next.prev = newNode;
+            size++;
         }
-        int counter = 1;
-        ListNode<T> currentNode = frontNode;
-        ListNode<T> newNode = new ListNode<>(value);
-        while (counter < index){
-            currentNode = currentNode.next;
-            counter++;
-        }
-        newNode.prev = currentNode;
-        newNode.next = currentNode.next;
-        newNode.prev.next = newNode;
-        newNode.next.prev = newNode;
-
     }
 
     public T remove() {
-        /* YOUR CODE HERE */
-        return null;
+        //
+        T result = popFront();
+        return result;
     }
 
     public T remove(int index) {
@@ -209,6 +210,9 @@ public class LinkedList<T> implements Iterable<T> {
             if (size==0){
                 throw new NoSuchElementException();
             }
+            if (current == frontNode){
+                throw new IllegalStateException();
+            }
             if (size==1){
                 //current = null;
                 backNode = null;
@@ -254,22 +258,48 @@ public class LinkedList<T> implements Iterable<T> {
         @Override
         public T next() {
             //
-            if (current == null){
+            if (!hasNext()){
                 throw new NoSuchElementException();
             }
+            T result = current.payload;
             current = current.prev;
-            return current.next.payload;
+            return result;
         }
 
         @Override
         public void remove() {
             //
-            if (current.next == null){
+            if (size==0){
                 throw new NoSuchElementException();
             }
-            current = current.prev;
-            --size;
-            current.next = null;
+            if (current == backNode){
+                throw new IllegalStateException();
+            }
+            if (size==1){
+                //current = null;
+                backNode = null;
+                frontNode = null;
+            } else if (current == null) {
+                current = frontNode;
+                frontNode = frontNode.next;
+                frontNode.prev = null;
+                current.next = null;
+            } else if (current.next == backNode){
+                current = current.next;
+                backNode = backNode.prev;
+                current.prev = null;
+                backNode.next = null;
+                current = backNode;
+            } else {
+                current = current.next;
+                ListNode<T> marker = current;
+                current.prev.next = current.next;
+                current.next.prev = current.prev;
+                current = current.prev;
+                marker.prev = null;
+                marker.next = null;
+            }
+            size--;
         }
     }
 
