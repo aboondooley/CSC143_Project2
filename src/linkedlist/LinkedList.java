@@ -27,13 +27,12 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     public LinkedList(Iterable<? extends T> c) {
-        /* YOUR CODE HERE */
 
        for (T value : c) {
             if (frontNode == null && backNode == null) {
-                frontNode = new ListNode<T>(value);
-                backNode = frontNode;
-            } else {
+                frontNode = new ListNode<T>(value); // If empty, creates the first node
+                backNode = frontNode; // Both frontNode and backNode are set to this node at first
+            } else { // If the list is not empty, add the other elements and move backNode along!
                 backNode.next = new ListNode<T>(value);
                 ListNode<T> temp = backNode;
                 backNode = backNode.next;
@@ -45,112 +44,109 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     public T peekFront() {
-        /* YOUR CODE HERE */
+        // Takes a look at the first node in the list
         if (frontNode==null){
-            return null;
+            return null; // returns null if the list is empty
         }
-        return this.frontNode.payload;
+        return this.frontNode.payload; // otherwise returns the value of the first node
     }
 
     public T peekBack() {
-        /* YOUR CODE HERE */
+        // Takes a look at the back node in the list
         if (backNode==null){
-            return null;
+            return null; // returns null if the list is empty
         }
-        return this.backNode.payload;
+        return this.backNode.payload; // otherwise returns the value of the last node in the list
     }
 
     public T popFront() {
-        //
-        if (frontNode == null){
+        // Takes off and returns the first value in the list
+        if (frontNode == null){ // If the list is empty
             throw new NoSuchElementException();
         }
-        T result = frontNode.payload;
-        if (this.size==1){
-            frontNode = null;
-            backNode = null;
-        } else {
-            ListNode<T> temp = frontNode; // mark to return
-            frontNode = frontNode.next;
-            temp.next = null;
-            frontNode.prev = null;
+        T result = frontNode.payload; // Save to return
+        if (this.size==1){ // If this is the last element of the list
+            frontNode = null; // Set both front and back nodes to null
+            backNode = null; // Empties the list
+        } else { // If the list size is not 1 or fewer
+            ListNode<T> temp = frontNode; // Mark to return
+            frontNode = frontNode.next; // Move frontNode forward one
+            temp.next = null; // detach the previous front node
+            frontNode.prev = null; // detach final tie from the previous front node
         }
         size--;
         return result;
     }
 
     public T popBack() {
-        //
-        if (frontNode == null){
+        // Take off and return the value at the back of the list
+        if (frontNode == null){ // If the list is empty
             throw new NoSuchElementException();
         }
         T result = backNode.payload;
-        if (this.size==1){
+        if (this.size==1){ // If this is the last element of the list
             frontNode = null;
             backNode = null;
-        } else {
+        } else { // If the list is size 2 or greater
             ListNode<T> temp = backNode; // mark to return
             backNode = backNode.prev;
             temp.prev = null; // detach the first node from the list
-            backNode.next = null; // detach from the
+            backNode.next = null; // detach from the previous backNode
         }
         size--;
         return result;
     }
 
     public void pushBack(T value) {
-        //
+        // Adds value to the back of the list
         ListNode<T> newNode = new ListNode<T>(value);
-       if (frontNode==null){
+       if (frontNode==null){ // If the list is empty
             backNode = newNode;
             frontNode = backNode;
-            size++;
-        } else {
-           newNode.prev = backNode;
+        } else { // If the list if not empty
+           newNode.prev = backNode; // Need to incorporate the new node as the backNode
            backNode.next = newNode;
            backNode= newNode;
-           size++;
        }
-
+        size++;
     }
 
     public void pushFront(T value) {
-        //
+        // Adds to the value to the front of the list
         ListNode<T> newNode = new ListNode<T>(value);
-        if (frontNode==null){
+        if (frontNode==null){ // If the list is empty
             frontNode = newNode;
             backNode = frontNode;
-            size++;
-        } else {
-            newNode.next = frontNode;
+        } else { // If the list is not empty
+            newNode.next = frontNode; // Need to incorporate the new node as the frontNode
             frontNode.prev = newNode;
             frontNode = newNode;
-            size++;
         }
-
+        size++;
     }
 
     public void add(T value) {
-        //
+        // Adds exclusively to the front of the list
         this.pushFront(value);
     }
 
     public void add(int index, T value) {
-        //
-        if (index==0){
-            pushFront(value);
-        } else if (index==this.size()){
-            pushBack(value);
-        } else  if (index < 0 | index >= this.size) {
+        // This operation is O(n) because worst case we need to step through each element in the list
+        if (index==0){ // If we are adding to the front
+            pushFront(value); // we can just pop from the front
+        } else if (index==this.size()){ // If we are adding to the back
+            pushBack(value); // we can just pop from the back
+        } else  if (index < 0 | index >= this.size) { // If the index is negative or past the last index in the list
             throw new IndexOutOfBoundsException();
-        } else {
-            int counter = 1;
+        } else { // else, if adding to the middle of the list
+            int counter = 1; //
             ListNode<T> currentNode = frontNode;
             ListNode<T> newNode = new ListNode<>(value);
             while (counter < index) {
                 currentNode = currentNode.next;
                 counter++;
             }
+            // Once at the index, reconfigure the references to include the new node
             newNode.prev = currentNode;
             newNode.next = currentNode.next;
             newNode.prev.next = newNode;
@@ -160,13 +156,14 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     public T remove() {
-        //
-        T result = popFront();
-        return result;
+        // removes from the front of the list and returns the value
+        return popFront();
+
     }
 
     public T remove(int index) {
-        //
+        // Removes the element at the given index (and returns the value)
+        // This is also O(n) because the worst case scenario would be to iterate through each element
         T result;
         if (index == 0){
             result = popFront();
@@ -181,6 +178,7 @@ public class LinkedList<T> implements Iterable<T> {
                 currentNode = currentNode.next;
                 counter++;
             }
+            // Once at the correct index, save the value to return and rearrange the references to exclude the removed node
             result = currentNode.payload;
             currentNode.prev.next = currentNode.next;
             currentNode.next.prev = currentNode.prev;
@@ -190,7 +188,7 @@ public class LinkedList<T> implements Iterable<T> {
     }
 
     private void remove(ListNode<T> node) {
-        /* YOUR CODE HERE */
+        // Not needed.
     }
 
     public int size() {
@@ -199,16 +197,16 @@ public class LinkedList<T> implements Iterable<T> {
 
     @Override
     public Iterator<T> iterator() {
-        /* YOUR CODE HERE */
         return new LinkedListIterator();
     }
 
     public class LinkedListIterator implements Iterator<T> {
-        /* YOUR CODE HERE */
+        // Begin at the frontNode
         private ListNode<T> current = frontNode;
         @Override
         public boolean hasNext() {
-            // We will keep moving the frontNode along so if frontNode is
+            // We will keep moving the frontNode along
+            // So current is actually once step before us
            return current != null;
         }
 
@@ -225,69 +223,63 @@ public class LinkedList<T> implements Iterable<T> {
 
         @Override
         public void remove() {
-            //
-            if (size==0){
+            // Removes the last value that was returned by .next()
+            if (size==0){ // If the LinkedList is empty
                 throw new NoSuchElementException();
             }
-            if (current == frontNode){
+            if (current == frontNode){ // If next has not been called yet
                 throw new IllegalStateException();
             }
-            if (size==1){
-                //current = null;
-                backNode = null;
-                frontNode = null;
-            } else if (current == null) {
-                current = backNode;
-                backNode = backNode.prev;
-                backNode.next = null;
-                current.prev = null;
-            } else if (current.prev == frontNode) {
-                current = current.prev;
-                frontNode = frontNode.next;
-                current.next = null;
-                frontNode.prev = null;
+            if (size==1){ // If this is the last node, set the front and back nodes to zero
+                backNode = null; frontNode = null;
+            } else if (current == null) { // If removing the last element in the list
+                current = backNode; backNode = backNode.prev;
+                backNode.next = null; current.prev = null;
+            } else if (current.prev == frontNode) { // If removing the first node
+                current = current.prev; frontNode = frontNode.next;
+                current.next = null; frontNode.prev = null;
                 current = frontNode;
-            } else {
+            } else { // if removing anywhere else in the list
                 current = current.prev;
                 ListNode<T> marker = current;
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
                 current = current.next;
-                marker.prev = null;
-                marker.next = null;
+                marker.prev = null; marker.next = null;
             }
             size--;
         }
     }
 
     public Iterator<T> reverseIterator() {
-        /* YOUR CODE HERE */
         return new LinkedListReverseIterator();
     }
 
     public class LinkedListReverseIterator implements Iterator<T> {
-        /* YOUR CODE HERE */
+        // Start at the backNode
         ListNode<T> current = backNode;
         @Override
         public boolean hasNext() {
-            /* YOUR CODE HERE */
+            // Current will be null if
             return current!=null;
         }
 
         @Override
         public T next() {
-            //
+            // If on the last node, there is no 'next' to return
             if (!hasNext()){
                 throw new NoSuchElementException();
             }
             T result = current.payload;
+            // Always move current to the next node
             current = current.prev;
             return result;
         }
 
         @Override
         public void remove() {
-            //
+            // removing during iteration
+            // Always returns the last element that was returned with the 'next' method
             if (size==0){
                 throw new NoSuchElementException();
             }
@@ -295,19 +287,14 @@ public class LinkedList<T> implements Iterable<T> {
                 throw new IllegalStateException();
             }
             if (size==1){
-                //current = null;
-                backNode = null;
-                frontNode = null;
+                backNode = null; frontNode = null;
             } else if (current == null) {
                 current = frontNode;
                 frontNode = frontNode.next;
-                frontNode.prev = null;
-                current.next = null;
+                frontNode.prev = null; current.next = null;
             } else if (current.next == backNode){
-                current = current.next;
-                backNode = backNode.prev;
-                current.prev = null;
-                backNode.next = null;
+                current = current.next; backNode = backNode.prev;
+                current.prev = null; backNode.next = null;
                 current = backNode;
             } else {
                 current = current.next;
@@ -315,8 +302,7 @@ public class LinkedList<T> implements Iterable<T> {
                 current.prev.next = current.next;
                 current.next.prev = current.prev;
                 current = current.prev;
-                marker.prev = null;
-                marker.next = null;
+                marker.prev = null; marker.next = null;
             }
             size--;
         }

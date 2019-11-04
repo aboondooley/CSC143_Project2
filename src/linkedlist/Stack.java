@@ -8,15 +8,17 @@ public class Stack<T> {
     }
 
     public void push(T value) {
-        //
+        // place on the top of the stack
         list.pushFront(value);
     }
 
     public T pop() {
+        // take from the top of the stack
         return list.popFront();
     }
 
     public T peek() {
+        // peek at the top of the stack
         return list.peekFront();
     }
 

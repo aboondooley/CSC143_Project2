@@ -12,18 +12,22 @@ public class Queue<T> extends LinkedList<T> {
 
     @Override
     public void add(T value) {
+        // add to the back of the line
         this.pushBack(value);
     }
 
     @Override
     public T remove() {
-        return this.popFront();
+        // take from the front of the line
+        return  super.popFront();
     }
 
     public T peek() {
-        return this.peekFront();
+        // peek at the front of the line
+        return super.peekFront();
     }
 
+    // Override all of these to throw a Run time exception
     @Override
     public void add(int index, T value) {
         throw new RuntimeException();
