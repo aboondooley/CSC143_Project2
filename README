@@ -1,6 +1,10 @@
-Name: 
-Student ID: 
-Email: 
-Hours Spent: 
-Bonus Points Claimed:
-Comments:
+Name: Alie Boon-Dooley
+Student ID: 870176985
+Email: asbd@uw.edu
+Hours Spent: 13 hours
+Bonus Points Claimed: +10 for .git
+Comments: I enjoyed this assignment as well. I am finally getting the hang of LinkedLists!
+ I thought that the tests were a little more confusing this time because each test
+uses several different methods so it was hard to get the project off the ground at first. But, once I had figured out the main
+methods that were used most frequently in the tests I was able to figure it out!
+I was surprised by how long my remove during iteration method was, maybe it could have been more concise, but it works!
