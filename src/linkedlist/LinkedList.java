@@ -189,6 +189,7 @@ public class LinkedList<T> implements Iterable<T> {
 
     private void remove(ListNode<T> node) {
         // Not needed.
+
     }
 
     public int size() {
